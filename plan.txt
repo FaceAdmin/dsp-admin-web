@@ -1,0 +1,6 @@
+1. Init backend and frontend. Python framework and React
+2. Connect database to manage users, store faces of users
+3. Start working on the website
+4. Connect face recognition to it
+5. Improve face recognition system
+6. report and some paper work
