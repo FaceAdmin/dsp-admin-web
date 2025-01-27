@@ -1,35 +1,89 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import { Layout, Form, Input, Button } from 'antd';
+
+const { Header, Content } = Layout;
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [loading, setLoading] = useState(false);
+
+  const onFinish = (values) => {
+    console.log('Login form values:', values);
+    setLoading(true);
+    // logic to the API
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Layout style={{ minHeight: '100vh' }}>
+      <Header style={{ backgroundColor: '#1890ff', display: 'flex', alignItems: 'center' }}>
+        <div style={{ color: '#fff', fontSize: '24px', fontWeight: 'bold' }}>
+          FaceAdmin
+        </div>
+      </Header>
+      <Content
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        background: '#f0f2f5',
+        height: '100vh'
+      }}
+      >
+        <div style={{
+          maxWidth: '400px',
+          width: '100%',
+          background: '#fff',
+          marginBottom: 96,
+          padding: '32px',
+          borderRadius: '12px',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
+        }}>
+
+          <h2 style={{ textAlign: 'center', marginBottom: 24 }}>Log In</h2>
+          
+          <Form
+            name="login-form"
+            layout="vertical"
+            onFinish={onFinish}
+          >
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                { required: true, message: 'Please enter email' },
+                { type: 'email', message: 'Incorrect email!' },
+              ]}
+            >
+              <Input placeholder="Enter your email" />
+            </Form.Item>
+            
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[{ required: true, message: 'Please enter password' }]}
+            >
+              <Input.Password placeholder="Enter your password" />
+            </Form.Item>
+            
+            <div style={{ textAlign: 'right', marginBottom: 16 }}>
+              <a href="#">Forgot Password?</a>
+            </div>
+
+            <Form.Item>
+              <Button 
+                type="primary" 
+                htmlType="submit" 
+                block
+                loading={loading}
+              >
+                Login
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+      </Content>
+    </Layout>
+  );
 }
 
-export default App
+export default App;
