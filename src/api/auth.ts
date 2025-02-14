@@ -1,6 +1,16 @@
 const API_URL = "http://127.0.0.1:8000/api";
 
-export const loginUser = async (email, password) => {
+interface LoginResponse {
+  token: string;
+  user: {
+    fname: string;
+    lname: string;
+    role: string;
+    email: string;
+  };
+}
+
+export const loginUser = async (email: string, password: string): Promise<LoginResponse> => {
   try {
     const response = await fetch(`${API_URL}/login/`, {
       method: "POST",
@@ -10,22 +20,22 @@ export const loginUser = async (email, password) => {
       body: JSON.stringify({ email, password }),
     });
 
-    const data = await response.json();
+    const data: LoginResponse = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error || "Login failed");
+      throw new Error(data.user ? "Login failed" : "Invalid credentials");
     }
 
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(data.user));
 
     return data;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error.message);
   }
 };
 
-export const logoutUser = () => {
+export const logoutUser = (): void => {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
 };

@@ -1,0 +1,23 @@
+.mainLayout {
+  min-height: 100vh; /* Занимаем весь экран */
+  display: flex;
+  flex-direction: column; /* Хедер сверху, потом всё остальное */
+}
+
+.bottomLayout {
+  flex: 1; /* Растягиваем нижнюю часть */
+  display: flex; /* Горизонтальное расположение: Sidebar слева, Content справа */
+  flex-direction: row;
+}
+
+.contentLayout {
+  flex: 1; /* Контент занимает всю оставшуюся ширину */
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+  padding: 24px;
+  background: #fff; /* Или #f0f2f5, если хотите */
+}

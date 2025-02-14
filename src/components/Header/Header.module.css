@@ -1,10 +1,4 @@
-/* Общий layout */
-.dashboard-layout {
-    height: 100vh;
-  }
-  
-  /* Верхний навбар */
-  .header {
+.header {
     background: #1890ff;
     color: white;
     display: flex;
@@ -13,37 +7,33 @@
     padding: 0 24px;
   }
   
-  .dashboard-title {
+  .title {
     font-size: 24px;
     color: white;
     font-weight: bold;
   }
-  
-  .profile-section {
+
+  .profileSection {
     display: flex;
     align-items: center;
     cursor: pointer;
   }
   
-  .profile-info {
+  .profileInfo {
     margin-left: 10px;
     display: flex;
     flex-direction: column;
   }
   
-  .profile-name {
-    font-size: 16px;
-    color: white;
+  .profileName {
+    font-size: 18px;
     font-weight: bold;
+    color: white;
   }
   
-  .profile-role {
+  .profileRole {
     font-size: 12px;
     color: white;
     opacity: 0.8;
-  }
-  
-  .dashboard-content {
-    padding: 24px;
   }
   
