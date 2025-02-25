@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { ConfigProvider } from "antd";
+import { App, ConfigProvider } from "antd";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import routes from "./routes";
 import "antd/dist/reset.css";
@@ -16,7 +16,9 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         },
       }}
     >
-      <RouterProvider router={router} />
+      <App>
+        <RouterProvider router={router} />
+      </App>
     </ConfigProvider>
   </React.StrictMode>
 );

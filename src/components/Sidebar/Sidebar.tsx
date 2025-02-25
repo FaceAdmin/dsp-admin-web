@@ -1,6 +1,6 @@
 import React from "react";
 import { Menu } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   DashboardOutlined,
   UserOutlined,
@@ -14,7 +14,8 @@ import styles from "./Sidebar.module.css";
 
 const Sidebar: React.FC = () => {
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const currentRoute = location.pathname.split("/")[1] || "dashboard";
   const handleMenuClick = (key: string) => {
     navigate(`/${key}`);
   };
@@ -25,7 +26,7 @@ const Sidebar: React.FC = () => {
 
       <Menu
         mode="inline"
-        defaultSelectedKeys={["dashboard"]}
+        selectedKeys={[currentRoute]}
         className={styles.menu}
         onClick={(info) => handleMenuClick(info.key)}
       >

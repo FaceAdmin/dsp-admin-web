@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Table, Input, Button } from "antd";
+import { Table, Button, App } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { SearchOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
-import { getUsers, User } from "../../api/users";
+import dayjs from "dayjs";
+import { getUsers, createUser, updateUser, User } from "../../api/users";
+import AddEditUserModal from "./AddEditUserModal";
+import SearchBar from "../../components/Searchbar/SearchBar";
 import styles from "./UsersPage.module.css";
 
 const UsersPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editUser, setEditUser] = useState<User | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const navigate = useNavigate();
+
+  const { message } = App.useApp();
 
   useEffect(() => {
     fetchUsers();
@@ -21,8 +28,10 @@ const UsersPage: React.FC = () => {
     try {
       const data = await getUsers();
       setUsers(data);
+      setFilteredUsers(data);
     } catch (error) {
       console.error("Failed to fetch users:", error);
+      message.error("Failed to fetch users");
     }
     setLoading(false);
   };
@@ -32,14 +41,29 @@ const UsersPage: React.FC = () => {
     { title: "Last Name", dataIndex: "lname", key: "lname" },
     { title: "Email", dataIndex: "email", key: "email" },
     { title: "Role", dataIndex: "role", key: "role", width: 100 },
-    { title: "Password", dataIndex: "password", key: "password" },
-    { title: "Created", dataIndex: "created_at", key: "created_at" },
-    { title: "Edited", dataIndex: "updated_at", key: "updated_at" },
+    {
+      title: "Password",
+      dataIndex: "password",
+      key: "password",
+      render: () => "*****",
+    },
+    {
+      title: "Created",
+      dataIndex: "created_at",
+      key: "created_at",
+      render: (value: string) => dayjs(value).format("DD/MM/YYYY | HH:mm"),
+    },
+    {
+      title: "Edited",
+      dataIndex: "updated_at",
+      key: "updated_at",
+      render: (value: string) => dayjs(value).format("DD/MM/YYYY | HH:mm"),
+    },
     {
       title: "Actions",
       key: "actions",
       render: (_, record) => (
-        <Button type="link" onClick={() => handleEdit(record.user_id)}>
+        <Button type="link" onClick={() => handleEdit(record)}>
           Edit
         </Button>
       ),
@@ -47,40 +71,56 @@ const UsersPage: React.FC = () => {
     },
   ];
 
-  const handleEdit = (userId: number) => {
-    navigate(`/users/${userId}/edit`);
+  const handleEdit = (user: User) => {
+    setIsEditMode(true);
+    setEditUser(user);
+    setIsModalOpen(true);
+  };
+
+  const handleAddUser = () => {
+    setIsEditMode(false);
+    setEditUser(null);
+    setIsModalOpen(true);
+  };
+
+  const handleSaveUser = async (values: any) => {
+    try {
+      if (isEditMode && editUser) {
+        await updateUser(editUser.user_id, values);
+        message.success("User updated!");
+      } else {
+        await createUser(values);
+        message.success("User created!");
+      }
+      setIsModalOpen(false);
+      fetchUsers();
+    } catch (error) {
+      console.error(error);
+      message.error("Error saving user");
+    }
   };
 
   const handleSearch = () => {
     if (!searchTerm) {
-      fetchUsers();
+      setFilteredUsers(users);
     } else {
       const filtered = users.filter((u) =>
         [u.fname, u.lname, u.email].some((field) =>
           field.toLowerCase().includes(searchTerm.toLowerCase())
         )
       );
-      setUsers(filtered);
+      setFilteredUsers(filtered);
     }
-  };
-
-  const handleAddUser = () => {
-    navigate("/users/add");
   };
 
   return (
     <div className={styles.usersContainer}>
       <div className={styles.header}>
-        <Input
-          placeholder="Search user..."
+        <SearchBar
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          allowClear
-          style={{ width: 200 }}
+          onChange={(val) => setSearchTerm(val)}
+          onSearch={handleSearch}
         />
-        <Button icon={<SearchOutlined />} onClick={handleSearch}>
-          Search
-        </Button>
         <Button type="primary" onClick={handleAddUser}>
           Add User
         </Button>
@@ -88,10 +128,18 @@ const UsersPage: React.FC = () => {
 
       <Table<User>
         columns={columns}
-        dataSource={users}
+        dataSource={filteredUsers}
         loading={loading}
         rowKey="user_id"
         pagination={{ pageSize: 8 }}
+      />
+
+      <AddEditUserModal
+        open={isModalOpen}
+        isEditMode={isEditMode}
+        user={editUser}
+        onSave={handleSaveUser}
+        onCancel={() => setIsModalOpen(false)}
       />
     </div>
   );
