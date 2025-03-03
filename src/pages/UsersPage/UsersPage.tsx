@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {Table, Button, App} from "antd";
+import { Table, Button, App } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import { getUsers, createUser, updateUser, deleteUser, User } from "../../api/users";
 import AddEditUserModal from "./AddEditUserModal";
-import SearchBar from "../../components/Searchbar/SearchBar";
 import styles from "./UsersPage.module.css";
+import SearchBar from "../../components/Searchbar/SearchBar.tsx";
 
 const UsersPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -23,6 +23,19 @@ const UsersPage: React.FC = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    if (!searchTerm) {
+      setFilteredUsers(users);
+    } else {
+      const filtered = users.filter((u) =>
+          [u.fname, u.lname, u.email].some((field) =>
+              field.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+      );
+      setFilteredUsers(filtered);
+    }
+  }, [searchTerm, users]);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -63,6 +76,7 @@ const UsersPage: React.FC = () => {
     {
       title: "Actions",
       key: "actions",
+      width: 100,
       render: (_, record) => (
           <div style={{ display: "flex", gap: "8px" }}>
             <Button
@@ -78,7 +92,6 @@ const UsersPage: React.FC = () => {
             />
           </div>
       ),
-      width: 100,
     },
   ];
 
@@ -88,16 +101,10 @@ const UsersPage: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleAddUser = () => {
-    setIsEditMode(false);
-    setEditUser(null);
-    setIsModalOpen(true);
-  };
-
   const handleDelete = (user: User) => {
     modal.confirm({
       title: "Are you sure you want to delete this user?",
-      content: `This action cannot be undone.`,
+      content: "This action cannot be undone",
       okText: "Yes",
       okType: "danger",
       cancelText: "No",
@@ -105,13 +112,19 @@ const UsersPage: React.FC = () => {
         try {
           await deleteUser(user.user_id);
           message.success("User deleted!");
-          await fetchUsers();
+          fetchUsers();
         } catch (error) {
           console.error(error);
           message.error("Error deleting user");
         }
       },
     });
+  };
+
+  const handleAddUser = () => {
+    setIsEditMode(false);
+    setEditUser(null);
+    setIsModalOpen(true);
   };
 
   const handleSaveUser = async (values: any) => {
@@ -131,48 +144,34 @@ const UsersPage: React.FC = () => {
     }
   };
 
-  const handleSearch = () => {
-    if (!searchTerm) {
-      setFilteredUsers(users);
-    } else {
-      const filtered = users.filter((u) =>
-        [u.fname, u.lname, u.email].some((field) =>
-          field.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      );
-      setFilteredUsers(filtered);
-    }
-  };
-
   return (
-    <div className={styles.usersContainer}>
-      <div className={styles.header}>
-        <SearchBar
-          value={searchTerm}
-          onChange={(val) => setSearchTerm(val)}
-          onSearch={handleSearch}
+      <div className={styles.usersContainer}>
+        <div className={styles.header}>
+          <SearchBar
+              value={searchTerm}
+              onChange={(val) => setSearchTerm(val)}
+          />
+          <Button type="primary" onClick={handleAddUser}>
+            Add User
+          </Button>
+        </div>
+
+        <Table<User>
+            columns={columns}
+            dataSource={filteredUsers}
+            loading={loading}
+            rowKey="user_id"
+            pagination={{ pageSize: 8 }}
         />
-        <Button type="primary" onClick={handleAddUser}>
-          Add User
-        </Button>
+
+        <AddEditUserModal
+            open={isModalOpen}
+            isEditMode={isEditMode}
+            user={editUser}
+            onSave={handleSaveUser}
+            onCancel={() => setIsModalOpen(false)}
+        />
       </div>
-
-      <Table<User>
-        columns={columns}
-        dataSource={filteredUsers}
-        loading={loading}
-        rowKey="user_id"
-        pagination={{ pageSize: 8 }}
-      />
-
-      <AddEditUserModal
-        open={isModalOpen}
-        isEditMode={isEditMode}
-        user={editUser}
-        onSave={handleSaveUser}
-        onCancel={() => setIsModalOpen(false)}
-      />
-    </div>
   );
 };
 
