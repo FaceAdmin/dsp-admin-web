@@ -22,8 +22,6 @@ const Sidebar: React.FC = () => {
 
   return (
     <div className={styles.sidebar}>
-      <div className={styles.logo}>FaceAdmin</div>
-
       <Menu
         mode="inline"
         selectedKeys={[currentRoute]}
