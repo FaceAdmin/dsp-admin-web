@@ -17,7 +17,6 @@ export interface User {
     return response.json();
   }
 
-  // Создать нового пользователя
 export async function createUser(newUser: Partial<User>): Promise<User> {
   const response = await fetch("http://127.0.0.1:8000/users/", {
     method: "POST",
@@ -30,7 +29,6 @@ export async function createUser(newUser: Partial<User>): Promise<User> {
   return response.json();
 }
 
-// Обновить существующего пользователя
 export async function updateUser(userId: number, updates: Partial<User>): Promise<User> {
   const response = await fetch(`http://127.0.0.1:8000/users/${userId}/`, {
     method: "PATCH",
@@ -41,6 +39,15 @@ export async function updateUser(userId: number, updates: Partial<User>): Promis
     throw new Error("Failed to update user");
   }
   return response.json();
+}
+
+export async function deleteUser(userId: number): Promise<void> {
+    const response = await fetch(`http://127.0.0.1:8000/users/${userId}/`, {
+        method: "DELETE",
+    });
+    if (!response.ok) {
+        throw new Error("Failed to delete user");
+    }
 }
 
   

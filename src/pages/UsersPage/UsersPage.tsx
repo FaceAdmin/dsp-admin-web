@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, App } from "antd";
+import {Table, Button, App} from "antd";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
-import { getUsers, createUser, updateUser, User } from "../../api/users";
+import { getUsers, createUser, updateUser, deleteUser, User } from "../../api/users";
 import AddEditUserModal from "./AddEditUserModal";
 import SearchBar from "../../components/Searchbar/SearchBar";
 import styles from "./UsersPage.module.css";
@@ -17,7 +18,7 @@ const UsersPage: React.FC = () => {
   const [editUser, setEditUser] = useState<User | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { message } = App.useApp();
+  const { message, modal } = App.useApp();
 
   useEffect(() => {
     fetchUsers();
@@ -63,11 +64,21 @@ const UsersPage: React.FC = () => {
       title: "Actions",
       key: "actions",
       render: (_, record) => (
-        <Button type="link" onClick={() => handleEdit(record)}>
-          Edit
-        </Button>
+          <div style={{ display: "flex", gap: "8px" }}>
+            <Button
+                icon={<EditOutlined />}
+                type="text"
+                onClick={() => handleEdit(record)}
+            />
+            <Button
+                icon={<DeleteOutlined />}
+                danger
+                type="text"
+                onClick={() => handleDelete(record)}
+            />
+          </div>
       ),
-      width: 80,
+      width: 100,
     },
   ];
 
@@ -81,6 +92,26 @@ const UsersPage: React.FC = () => {
     setIsEditMode(false);
     setEditUser(null);
     setIsModalOpen(true);
+  };
+
+  const handleDelete = (user: User) => {
+    modal.confirm({
+      title: "Are you sure you want to delete this user?",
+      content: `This action cannot be undone.`,
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk: async () => {
+        try {
+          await deleteUser(user.user_id);
+          message.success("User deleted!");
+          await fetchUsers();
+        } catch (error) {
+          console.error(error);
+          message.error("Error deleting user");
+        }
+      },
+    });
   };
 
   const handleSaveUser = async (values: any) => {
