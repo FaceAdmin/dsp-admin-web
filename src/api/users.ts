@@ -9,13 +9,24 @@ export interface User {
     updated_at: string;
   }
   
-  export async function getUsers(): Promise<User[]> {
-    const response = await fetch("http://127.0.0.1:8000/users/");
+export async function getUsers(): Promise<User[]> {
+const response = await fetch("http://127.0.0.1:8000/users/");
+if (!response.ok) {
+  throw new Error("Failed to fetch users");
+}
+return response.json();
+}
+
+export async function getCurrentUser(): Promise<User> {
+    const response = await fetch("http://127.0.0.1:8000/users/me/", {
+        method: "GET",
+        credentials: "include",
+    });
     if (!response.ok) {
-      throw new Error("Failed to fetch users");
+        throw new Error("Failed to fetch current user");
     }
     return response.json();
-  }
+}
 
 export async function createUser(newUser: Partial<User>): Promise<User> {
   const response = await fetch("http://127.0.0.1:8000/users/", {

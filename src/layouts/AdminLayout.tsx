@@ -11,10 +11,19 @@ const AdminLayout: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login");
-    }
+    const checkAuth = async () => {
+      try {
+        const resp = await fetch("http://127.0.0.1:8000/users/me/", {
+          credentials: "include",
+        });
+        if (!resp.ok) {
+          navigate("/login");
+        }
+      } catch (err) {
+        navigate("/login");
+      }
+    };
+    checkAuth();
   }, [navigate]);
 
   return (

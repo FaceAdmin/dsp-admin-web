@@ -7,7 +7,7 @@ import durationPlugin from "dayjs/plugin/duration";
 import { getAttendanceRecords, deleteAttendance, Attendance } from "../../api/attendance";
 import SearchBar from "../../components/Searchbar/SearchBar";
 import styles from "./AttendancePage.module.css";
-import {parseDuration} from "../../utils/parseInterval.ts";
+import {parseDuration} from "../../utils/parseDuration.ts";
 
 dayjs.extend(durationPlugin);
 

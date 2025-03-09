@@ -1,7 +1,6 @@
 const API_URL = "http://127.0.0.1:8000/users";
 
 interface LoginResponse {
-  token: string;
   user: {
     fname: string;
     lname: string;
@@ -17,6 +16,7 @@ export const loginUser = async (email: string, password: string): Promise<LoginR
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({ email, password }),
     });
 
@@ -26,16 +26,20 @@ export const loginUser = async (email: string, password: string): Promise<LoginR
       throw new Error(data.user ? "Login failed" : "Invalid credentials");
     }
 
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
-
     return data;
   } catch (error: any) {
     throw new Error(error.message);
   }
 };
 
-export const logoutUser = (): void => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("user");
+export const logoutUser = async (): Promise<void> => {
+  try {
+    await fetch(`${API_URL}/logout/`, {
+      method: "POST",
+      credentials: "include",
+    });
+    window.location.href = "/login";
+  } catch (error) {
+    console.error("Logout failed:", error);
+  }
 };
