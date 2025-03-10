@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:8000/users";
+const API_URL = "http://127.0.0.1:8000";
 
 interface LoginResponse {
   user: {
@@ -11,7 +11,7 @@ interface LoginResponse {
 
 export const loginUser = async (email: string, password: string): Promise<LoginResponse> => {
   try {
-    const response = await fetch(`${API_URL}/login/`, {
+    const response = await fetch(`${API_URL}/users/login/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -34,7 +34,7 @@ export const loginUser = async (email: string, password: string): Promise<LoginR
 
 export const logoutUser = async (): Promise<void> => {
   try {
-    await fetch(`${API_URL}/logout/`, {
+    await fetch(`${API_URL}/users/logout/`, {
       method: "POST",
       credentials: "include",
     });

@@ -1,3 +1,5 @@
+const API_URL = "http://127.0.0.1:8000";
+
 export interface Attendance {
     attendance_id: number;
     user: {
@@ -12,10 +14,10 @@ export interface Attendance {
     duration: string | null;
 }
 
-const API_URL = "http://127.0.0.1:8000/attendance/";
-
 export async function getAttendanceRecords(date?: string): Promise<Attendance[]> {
-    const url = date ? `${API_URL}?date=${date}` : API_URL;
+    const url = date
+        ? `${API_URL}/attendance/?date=${date}`
+        : `${API_URL}/attendance/`;
     const response = await fetch(url);
     if (!response.ok) {
         throw new Error("Failed to fetch attendance records");
@@ -24,7 +26,7 @@ export async function getAttendanceRecords(date?: string): Promise<Attendance[]>
 }
 
 export async function updateAttendance(id: number, updates: Partial<Attendance>): Promise<Attendance> {
-    const response = await fetch(`${API_URL}${id}/`, {
+    const response = await fetch(`${API_URL}/attendance/${id}/`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updates),
@@ -36,7 +38,7 @@ export async function updateAttendance(id: number, updates: Partial<Attendance>)
 }
 
 export async function deleteAttendance(id: number): Promise<void> {
-    const response = await fetch(`${API_URL}${id}/`, {
+    const response = await fetch(`${API_URL}/attendance/${id}/`, {
         method: "DELETE",
     });
     if (!response.ok) {

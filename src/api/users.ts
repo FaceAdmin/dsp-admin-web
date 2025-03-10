@@ -1,3 +1,5 @@
+const API_URL = "http://127.0.0.1:8000";
+
 export interface User {
     user_id: number;
     fname: string;
@@ -10,7 +12,7 @@ export interface User {
   }
   
 export async function getUsers(): Promise<User[]> {
-const response = await fetch("http://127.0.0.1:8000/users/");
+const response = await fetch(`${API_URL}/users/`);
 if (!response.ok) {
   throw new Error("Failed to fetch users");
 }
@@ -18,7 +20,7 @@ return response.json();
 }
 
 export async function getCurrentUser(): Promise<User> {
-    const response = await fetch("http://127.0.0.1:8000/users/me/", {
+    const response = await fetch(`${API_URL}/users/me/`, {
         method: "GET",
         credentials: "include",
     });
@@ -29,7 +31,7 @@ export async function getCurrentUser(): Promise<User> {
 }
 
 export async function createUser(newUser: Partial<User>): Promise<User> {
-  const response = await fetch("http://127.0.0.1:8000/users/", {
+  const response = await fetch(`${API_URL}/users/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(newUser),
@@ -41,7 +43,7 @@ export async function createUser(newUser: Partial<User>): Promise<User> {
 }
 
 export async function updateUser(userId: number, updates: Partial<User>): Promise<User> {
-  const response = await fetch(`http://127.0.0.1:8000/users/${userId}/`, {
+  const response = await fetch(`${API_URL}/users/${userId}/`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(updates),
@@ -53,7 +55,7 @@ export async function updateUser(userId: number, updates: Partial<User>): Promis
 }
 
 export async function deleteUser(userId: number): Promise<void> {
-    const response = await fetch(`http://127.0.0.1:8000/users/${userId}/`, {
+    const response = await fetch(`${API_URL}/users/${userId}/`, {
         method: "DELETE",
     });
     if (!response.ok) {
