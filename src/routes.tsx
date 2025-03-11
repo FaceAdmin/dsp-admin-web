@@ -6,6 +6,7 @@ import AdminLayout from "./layouts/AdminLayout";
 import AttendancePage from "./pages/AttendancePage/AttendancePage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage.tsx";
 import EntryCodesPage from "./pages/EntryCodesPage/EntryCodesPage.tsx";
+import ReportsPage from "./pages/ReportsPage/ReportsPage.tsx";
 
 const routes = createRoutesFromElements(
   <>
@@ -16,6 +17,7 @@ const routes = createRoutesFromElements(
       <Route path="/attendance" element={<AttendancePage />} />
       <Route path="/entrycodes" element={<EntryCodesPage />} />
       <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/reports" element={<ReportsPage />} />
     </Route>
   </>
 );

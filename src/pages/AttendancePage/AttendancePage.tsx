@@ -157,6 +157,7 @@ const AttendancePage: React.FC = () => {
                         onChange={(_date, dateString) => setSelectedDate(Array.isArray(dateString) ? dateString[0] : dateString || null)}
                         format="YYYY-MM-DD"
                         placeholder="Select Date"
+                        inputReadOnly={true}
                     />
                 </Space>
             </div>
