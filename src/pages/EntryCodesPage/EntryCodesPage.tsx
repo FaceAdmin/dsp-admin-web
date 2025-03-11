@@ -46,7 +46,6 @@ const EntryCodesPage: React.FC = () => {
     };
 
     const handleRegenerate = async (record: EntryCode) => {
-        // Генерируем новый 8-значный код
         const newCode = Math.floor(10000000 + Math.random() * 90000000).toString();
         try {
             await updateEntryCode(record.user, { code: newCode });

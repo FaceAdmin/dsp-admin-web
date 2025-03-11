@@ -20,6 +20,12 @@ export async function getEntryCodes(): Promise<EntryCode[]> {
     return response.json();
 }
 
+export async function getEntryCode(userId: number): Promise<EntryCode> {
+    const response = await fetch(`${API_URL}/entry-codes/${userId}/`);
+    if (!response.ok) throw new Error("Failed to fetch entry code");
+    return response.json();
+}
+
 export async function updateEntryCode(userId: number, updates: Partial<EntryCode>): Promise<EntryCode> {
     const response = await fetch(`${API_URL}/entry-codes/${userId}/`, {
         method: "PATCH",

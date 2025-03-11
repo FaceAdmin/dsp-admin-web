@@ -5,7 +5,6 @@ import {
   BarChartOutlined,
   UserOutlined,
   FileTextOutlined,
-  SettingOutlined,
   FileSearchOutlined,
   AlignLeftOutlined,
   ClockCircleOutlined,
@@ -43,9 +42,6 @@ const Sidebar: React.FC = () => {
         </Menu.Item>
         <Menu.Item key="reports" icon={<FileTextOutlined />}>
           Reports
-        </Menu.Item>
-        <Menu.Item key="settings" icon={<SettingOutlined />}>
-          Settings
         </Menu.Item>
         <Menu.Item key="logs" icon={<ClockCircleOutlined />}>
           Logs
