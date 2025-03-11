@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, DatePicker, App, Tag, Space } from "antd";
+import { Table, Button, DatePicker, App, Tag, Space, Modal, TimePicker, Form } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import durationPlugin from "dayjs/plugin/duration";
-import { getAttendanceRecords, deleteAttendance, Attendance } from "../../api/attendance";
+import { getAttendanceRecords, updateAttendance, deleteAttendance, Attendance } from "../../api/attendance";
 import SearchBar from "../../components/Searchbar/SearchBar";
 import styles from "./AttendancePage.module.css";
-import {parseDuration} from "../../utils/parseDuration.ts";
+import { parseDuration } from "../../utils/parseDuration.ts";
 
 dayjs.extend(durationPlugin);
 
@@ -19,6 +19,10 @@ const AttendancePage: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState("");
 
     const { message, modal } = App.useApp();
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingRecord, setEditingRecord] = useState<Attendance | null>(null);
+    const [form] = Form.useForm();
 
     useEffect(() => {
         fetchRecords();
@@ -51,28 +55,58 @@ const AttendancePage: React.FC = () => {
         setLoading(false);
     };
 
+    const handleEdit = (record: Attendance) => {
+        setEditingRecord(record);
+        setIsModalOpen(true);
+        form.setFieldsValue({
+            check_in: record.check_in ? dayjs(record.check_in) : null,
+            check_out: record.check_out ? dayjs(record.check_out) : null,
+        });
+    };
+
+    const handleDelete = (record: Attendance) => {
+        modal.confirm({
+            title: "Are you sure you want to delete this record?",
+            content: "This action cannot be undone",
+            okText: "Yes",
+            okType: "danger",
+            cancelText: "No",
+            onOk: async () => {
+                try {
+                    await deleteAttendance(record.attendance_id);
+                    message.success("Attendance record deleted!");
+                    fetchRecords();
+                } catch (error) {
+                    console.error(error);
+                    message.error("Error deleting attendance record");
+                }
+            },
+        });
+    };
+
+    const handleSave = async (values: any) => {
+        if (!editingRecord) return;
+
+        try {
+            await updateAttendance(editingRecord.attendance_id, {
+                check_in: values.check_in ? values.check_in.toISOString() : null,
+                check_out: values.check_out ? values.check_out.toISOString() : null,
+            });
+
+            message.success("Attendance record updated!");
+            setIsModalOpen(false);
+            fetchRecords();
+        } catch (error) {
+            console.error("Error updating attendance record:", error);
+            message.error("Error updating attendance record");
+        }
+    };
+
     const columns: ColumnsType<Attendance> = [
-        {
-            title: "First Name",
-            dataIndex: ["user", "fname"],
-            key: "fname",
-        },
-        {
-            title: "Last Name",
-            dataIndex: ["user", "lname"],
-            key: "lname",
-        },
-        {
-            title: "Email",
-            dataIndex: ["user", "email"],
-            key: "email",
-        },
-        {
-            title: "Role",
-            dataIndex: ["user", "role"],
-            key: "role",
-            width: 100,
-        },
+        { title: "First Name", dataIndex: ["user", "fname"], key: "fname" },
+        { title: "Last Name", dataIndex: ["user", "lname"], key: "lname" },
+        { title: "Email", dataIndex: ["user", "email"], key: "email" },
+        { title: "Role", dataIndex: ["user", "role"], key: "role", width: 100 },
         {
             title: "Date",
             dataIndex: "check_in",
@@ -97,11 +131,8 @@ const AttendancePage: React.FC = () => {
             dataIndex: "duration",
             key: "duration",
             render: (value: string | null) => {
-                if (!value) {
-                    return <Tag color="gray">N/A</Tag>;
-                }
-                const parsed = parseDuration(value);
-                return parsed;
+                if (!value) return <Tag color="gray">N/A</Tag>;
+                return parseDuration(value);
             },
         },
         {
@@ -110,44 +141,17 @@ const AttendancePage: React.FC = () => {
             width: 100,
             render: (_, record) => (
                 <Space>
-                    <Button icon={<EditOutlined />} type="text" onClick={() => handleEdit()} />
+                    <Button icon={<EditOutlined />} type="text" onClick={() => handleEdit(record)} />
                     <Button icon={<DeleteOutlined />} danger type="text" onClick={() => handleDelete(record)} />
                 </Space>
             ),
         },
     ];
 
-    const handleEdit = () => {
-        message.info("Editing attendance is not implemented yet.");
-    };
-
-    const handleDelete = (record: Attendance) => {
-        modal.confirm({
-            title: "Are you sure you want to delete this record?",
-            content: "This action cannot be undone",
-            okText: "Yes",
-            okType: "danger",
-            cancelText: "No",
-            onOk: async () => {
-                try {
-                    await deleteAttendance(record.attendance_id);
-                    message.success("Attendance record deleted!");
-                    fetchRecords();
-                } catch (error) {
-                    console.error(error);
-                    message.error("Error deleting attendance record");
-                }
-            },
-        });
-    };
-
     return (
         <div className={styles.attendanceContainer}>
             <div className={styles.header}>
-                <SearchBar
-                    value={searchTerm}
-                    onChange={(val) => setSearchTerm(val)}
-                />
+                <SearchBar value={searchTerm} onChange={(val) => setSearchTerm(val)} />
                 <Space>
                     <DatePicker
                         onChange={(_date, dateString) => setSelectedDate(Array.isArray(dateString) ? dateString[0] : dateString || null)}
@@ -164,6 +168,21 @@ const AttendancePage: React.FC = () => {
                 rowKey="attendance_id"
                 pagination={{ pageSize: 10 }}
             />
+            <Modal
+                title="Edit Attendance"
+                open={isModalOpen}
+                onCancel={() => setIsModalOpen(false)}
+                onOk={() => form.submit()}
+            >
+                <Form form={form} layout="vertical" onFinish={handleSave}>
+                    <Form.Item label="Check-in Time" name="check_in" rules={[{ required: true }]}>
+                        <TimePicker format="HH:mm" style={{ width: "100%" }} />
+                    </Form.Item>
+                    <Form.Item label="Check-out Time" name="check_out">
+                        <TimePicker format="HH:mm" style={{ width: "100%" }} />
+                    </Form.Item>
+                </Form>
+            </Modal>
         </div>
     );
 };

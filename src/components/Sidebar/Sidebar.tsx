@@ -2,7 +2,7 @@ import React from "react";
 import { Menu } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
-  DashboardOutlined,
+  BarChartOutlined,
   UserOutlined,
   FileTextOutlined,
   SettingOutlined,
@@ -29,7 +29,7 @@ const Sidebar: React.FC = () => {
         className={styles.menu}
         onClick={(info) => handleMenuClick(info.key)}
       >
-        <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
+        <Menu.Item key="dashboard" icon={<BarChartOutlined />}>
           Dashboard
         </Menu.Item>
         <Menu.Item key="users" icon={<UserOutlined />}>
