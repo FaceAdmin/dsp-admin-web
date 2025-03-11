@@ -7,7 +7,7 @@ import {
   FileTextOutlined,
   SettingOutlined,
   FileSearchOutlined,
-  BookOutlined,
+  AlignLeftOutlined,
   ClockCircleOutlined,
   QrcodeOutlined,
 } from "@ant-design/icons";
@@ -47,10 +47,10 @@ const Sidebar: React.FC = () => {
         <Menu.Item key="settings" icon={<SettingOutlined />}>
           Settings
         </Menu.Item>
-        <Menu.Item key="logs" icon={<BookOutlined />}>
+        <Menu.Item key="logs" icon={<ClockCircleOutlined />}>
           Logs
         </Menu.Item>
-        <Menu.Item key="docs" icon={<ClockCircleOutlined />}>
+        <Menu.Item key="docs" icon={<AlignLeftOutlined />}>
           Documentation
         </Menu.Item>
       </Menu>
