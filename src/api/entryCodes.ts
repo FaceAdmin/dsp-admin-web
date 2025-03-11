@@ -6,6 +6,7 @@ export interface EntryCode {
     user_fname: string;
     user_lname: string;
     user_email: string;
+    user_role: string;
     code: string;
     created_at: string;
     updated_at: string;
