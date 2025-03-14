@@ -7,6 +7,9 @@ import AttendancePage from "./pages/AttendancePage/AttendancePage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage.tsx";
 import EntryCodesPage from "./pages/EntryCodesPage/EntryCodesPage.tsx";
 import ReportsPage from "./pages/ReportsPage/ReportsPage.tsx";
+import FacesPage from "./pages/FacesPage/FacesPage.tsx";
+import DocumentationPage from "./pages/DocumentationPage/DocumentationPage.tsx";
+import LogsPage from "./pages/LogsPage/LogsPage.tsx";
 
 const routes = createRoutesFromElements(
   <>
@@ -18,6 +21,9 @@ const routes = createRoutesFromElements(
       <Route path="/entrycodes" element={<EntryCodesPage />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/reports" element={<ReportsPage />} />
+      <Route path="/faces" element={<FacesPage />} />
+      <Route path="/docs" element={<DocumentationPage />} />
+      <Route path="/logs" element={<LogsPage />} />
     </Route>
   </>
 );
