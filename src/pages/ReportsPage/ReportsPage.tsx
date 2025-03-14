@@ -16,6 +16,7 @@ const ReportsPage: React.FC = () => {
     const [dateRange, setDateRange] = useState<[dayjs.Dayjs, dayjs.Dayjs] | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [pickerOpen, setPickerOpen] = useState(false);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const { message } = App.useApp();
 
@@ -83,7 +84,8 @@ const ReportsPage: React.FC = () => {
             </Text>
             <div className={styles.filtersRow}>
                 <Dropdown
-                    open={!!searchTerm}
+                    open={dropdownOpen}
+                    onOpenChange={setDropdownOpen}
                     dropdownRender={() => (
                         <div className={styles.dropdownMenu}>
                             {filteredUsers.length > 0 ? (
@@ -105,7 +107,10 @@ const ReportsPage: React.FC = () => {
                     <Input
                         placeholder="Search user"
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={(e) => {
+                            setSearchTerm(e.target.value);
+                            setDropdownOpen(!!e.target.value);
+                        }}
                         allowClear
                         style={{ width: 300 }}
                         prefix={<SearchOutlined />}
