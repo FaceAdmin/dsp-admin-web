@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button, DatePicker, App, Tag, Space, Modal, TimePicker, Form } from "antd";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined, RedoOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import durationPlugin from "dayjs/plugin/duration";
@@ -159,6 +159,13 @@ const AttendancePage: React.FC = () => {
                         placeholder="Select Date"
                         inputReadOnly={true}
                     />
+                    <Button
+                        icon={<RedoOutlined />}
+                        type="primary"
+                        onClick={fetchRecords}
+                    >
+                        Refresh
+                    </Button>
                 </Space>
             </div>
 
