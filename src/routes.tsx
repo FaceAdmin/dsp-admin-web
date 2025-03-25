@@ -5,7 +5,6 @@ import UsersPage from "./pages/UsersPage/UsersPage";
 import AdminLayout from "./layouts/AdminLayout";
 import AttendancePage from "./pages/AttendancePage/AttendancePage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage.tsx";
-import EntryCodesPage from "./pages/EntryCodesPage/EntryCodesPage.tsx";
 import ReportsPage from "./pages/ReportsPage/ReportsPage.tsx";
 import FacesPage from "./pages/FacesPage/FacesPage.tsx";
 import DocumentationPage from "./pages/DocumentationPage/DocumentationPage.tsx";
@@ -18,7 +17,6 @@ const routes = createRoutesFromElements(
       <Route path="/dashboard" element={<DashboardPage />} />
       <Route path="/users" element={<UsersPage />} />
       <Route path="/attendance" element={<AttendancePage />} />
-      <Route path="/entrycodes" element={<EntryCodesPage />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/reports" element={<ReportsPage />} />
       <Route path="/faces" element={<FacesPage />} />

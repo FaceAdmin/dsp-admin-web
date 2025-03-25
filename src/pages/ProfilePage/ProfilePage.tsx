@@ -3,14 +3,12 @@ import { Card, Tabs, Form, Input, Button, Typography, message } from "antd";
 import type { TabsProps } from "antd";
 import dayjs from "dayjs";
 import { getCurrentUser, updateUser, User } from "../../api/users";
-import { getEntryCode, updateEntryCode } from "../../api/entryCodes"; // <-- используем для работы с кодом
 import styles from "./ProfilePage.module.css";
 
 const { Title, Text } = Typography;
 
 const ProfilePage: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
-    const [entryCode, setEntryCode] = useState<string>("N/A");
     const [loading, setLoading] = useState(false);
     const [form] = Form.useForm();
 
@@ -28,29 +26,11 @@ const ProfilePage: React.FC = () => {
                 lname: currentUser.lname,
                 email: currentUser.email,
             });
-            if (currentUser.user_id) {
-                const entryCodeData = await getEntryCode(currentUser.user_id);
-                setEntryCode(entryCodeData.code);
-            }
         } catch (error) {
             console.error("Failed to fetch user profile or entry code:", error);
             message.error("Failed to load profile data");
         }
         setLoading(false);
-    };
-
-    const handleRegenerateCode = async () => {
-        if (!user) return;
-        try {
-            const newCode = Math.floor(10000000 + Math.random() * 90000000).toString();
-            const updated = await updateEntryCode(user.user_id, { code: newCode });
-            // updated.code – новый код
-            setEntryCode(updated.code);
-            message.success("Entry code regenerated!");
-        } catch (error) {
-            console.error("Error regenerating code:", error);
-            message.error("Failed to regenerate entry code");
-        }
     };
 
     const handleSaveChanges = async (values: any) => {
@@ -109,20 +89,6 @@ const ProfilePage: React.FC = () => {
             key: "photos",
             label: "Photos",
             children: <div className={styles.tabContent}>Photos content (coming soon)...</div>,
-        },
-        {
-            key: "entryCode",
-            label: "Entry Code",
-            children: (
-                <div className={styles.tabContent}>
-                    <div style={{ marginBottom: 8 }}>
-                        <strong>Your Entry Code:</strong> {entryCode}
-                    </div>
-                    <Button type="primary" onClick={handleRegenerateCode}>
-                        Regenerate Code
-                    </Button>
-                </div>
-            ),
         },
         {
             key: "help",
