@@ -8,7 +8,8 @@ import {
   FileSearchOutlined,
   AlignLeftOutlined,
   ClockCircleOutlined,
-  SmileOutlined
+  SmileOutlined,
+  QrcodeOutlined
 } from "@ant-design/icons";
 import styles from "./Sidebar.module.css";
 
@@ -39,6 +40,9 @@ const Sidebar: React.FC = () => {
         </Menu.Item>
         <Menu.Item key="faces" icon={<SmileOutlined />}>
           Faces
+        </Menu.Item>
+        <Menu.Item key="codes" icon={<QrcodeOutlined />}>
+          Codes
         </Menu.Item>
         <Menu.Item key="reports" icon={<FileTextOutlined />}>
           Reports

@@ -1,0 +1,11 @@
+.codesContainer {
+    padding: 24px;
+    background: #fff;
+}
+
+.header {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    align-items: center;
+}

@@ -7,6 +7,7 @@ export interface User {
     email: string;
     role: string;
     password: string;
+    otp_configured: boolean;
     created_at: string;
     updated_at: string;
   }
@@ -63,4 +64,15 @@ export async function deleteUser(userId: number): Promise<void> {
     }
 }
 
+export async function resendOtpEmail(email: string): Promise<{message: string}> {
+    const response = await fetch(`${API_URL}/users/resend-otp/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+    });
+    if (!response.ok) {
+        throw new Error("Failed to resend OTP email");
+    }
+    return response.json();
+}
   
