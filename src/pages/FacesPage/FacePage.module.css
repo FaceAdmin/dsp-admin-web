@@ -1,0 +1,53 @@
+.codesContainer {
+    padding: 24px;
+    background: #fff;
+}
+
+.header {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    align-items: center;
+}
+
+.uploadButton {
+    margin-bottom: 16px;
+}
+
+.photosContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.photoBox {
+    position: relative;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    min-width: 80px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.photoName {
+    margin-right: 16px;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.closeIcon {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #888;
+}
+
+.closeIcon:hover {
+    color: red;
+}
