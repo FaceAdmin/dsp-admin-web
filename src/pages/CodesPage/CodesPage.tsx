@@ -4,7 +4,7 @@ import { ReloadOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import SearchBar from "../../components/Searchbar/SearchBar";
 import styles from "./CodesPage.module.css";
-import { getUsers, resendOtpEmail, User } from "../../api/users";
+import { getUsers, resendOtpEmail, User, regenerateOtpSecret } from "../../api/users";
 
 const CodesPage: React.FC = () => {
     const [users, setUsers] = useState<User[]>([]);
@@ -24,7 +24,7 @@ const CodesPage: React.FC = () => {
         } else {
             const lowerSearch = searchTerm.toLowerCase();
             const filtered = users.filter((user) =>
-                [user.fname, user.lname, user.email, user.role].some(field =>
+                [user.fname, user.lname, user.email, user.role].some((field) =>
                     field.toLowerCase().includes(lowerSearch)
                 )
             );
@@ -45,6 +45,7 @@ const CodesPage: React.FC = () => {
         setLoading(false);
     };
 
+    // Старая логика "Resend Email"
     const handleResendOtp = async (record: User) => {
         try {
             await resendOtpEmail(record.email);
@@ -53,6 +54,18 @@ const CodesPage: React.FC = () => {
         } catch (error) {
             console.error("Failed to resend OTP email:", error);
             message.error("Failed to resend OTP email");
+        }
+    };
+
+    // Новая логика "Regenerate Secret"
+    const handleRegenerateSecret = async (record: User) => {
+        try {
+            await regenerateOtpSecret(record.user_id);
+            message.success("OTP secret regenerated and email sent!");
+            fetchUsers();
+        } catch (error) {
+            console.error("Failed to regenerate OTP secret:", error);
+            message.error("Failed to regenerate OTP secret");
         }
     };
 
@@ -79,6 +92,11 @@ const CodesPage: React.FC = () => {
                         disabled={record.otp_configured}
                     >
                         Resend Email
+                    </Button>
+                    <Button
+                        onClick={() => handleRegenerateSecret(record)}
+                    >
+                        Regenerate Secret
                     </Button>
                 </Space>
             ),

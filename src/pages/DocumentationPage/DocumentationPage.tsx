@@ -62,8 +62,9 @@ const DocumentationPage: React.FC = () => {
                 entry-related codes that users may use for alternative entry methods.
                 For example, if a user cannot be recognized by face for any reason,
                 they may use a unique code to verify their identity. Administrators can
-                regenerate codes, resend emails with these codes, or search for users
-                who have not yet configured a code.
+                regenerate OTP secrets, resend emails with the QR Code and setup key to
+                set up the code for the entries using authenticator app, or search for
+                users who have not yet configured a code.
             </Paragraph>
 
             <Title level={3}>Reports</Title>

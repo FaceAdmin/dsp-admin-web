@@ -75,4 +75,12 @@ export async function resendOtpEmail(email: string): Promise<{message: string}> 
     }
     return response.json();
 }
-  
+
+export async function regenerateOtpSecret(userId: number): Promise<void> {
+    const response = await fetch(`${API_URL}/users/${userId}/regenerate-otp/`, {
+        method: "POST",
+    });
+    if (!response.ok) {
+        throw new Error("Failed to regenerate OTP secret");
+    }
+}
