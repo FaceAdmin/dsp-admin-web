@@ -94,6 +94,7 @@ const CodesPage: React.FC = () => {
                         Resend Email
                     </Button>
                     <Button
+                        type="primary"
                         onClick={() => handleRegenerateSecret(record)}
                     >
                         Regenerate Secret
