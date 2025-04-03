@@ -1,0 +1,5 @@
+.documentationContainer {
+    padding: 24px;
+    background: #fff;
+    overflow-y: auto;
+}
