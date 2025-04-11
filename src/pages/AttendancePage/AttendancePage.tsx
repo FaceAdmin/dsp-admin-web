@@ -34,7 +34,7 @@ const AttendancePage: React.FC = () => {
         } else {
             const lowerSearch = searchTerm.toLowerCase();
             const filtered = records.filter((record) =>
-                [record.user.fname, record.user.lname, record.user.email].some(field =>
+                [record.user.first_name, record.user.last_name, record.user.email].some(field =>
                     field.toLowerCase().includes(lowerSearch)
                 )
             );
@@ -103,8 +103,8 @@ const AttendancePage: React.FC = () => {
     };
 
     const columns: ColumnsType<Attendance> = [
-        { title: "First Name", dataIndex: ["user", "fname"], key: "fname" },
-        { title: "Last Name", dataIndex: ["user", "lname"], key: "lname" },
+        { title: "First Name", dataIndex: ["user", "first_name"], key: "first_name" },
+        { title: "Last Name", dataIndex: ["user", "last_name"], key: "last_name" },
         { title: "Email", dataIndex: ["user", "email"], key: "email" },
         { title: "Role", dataIndex: ["user", "role"], key: "role", width: 100 },
         {

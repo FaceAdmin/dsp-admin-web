@@ -2,26 +2,29 @@ const API_URL = "http://127.0.0.1:8000";
 
 export interface User {
     user_id: number;
-    fname: string;
-    lname: string;
+    first_name: string;
+    last_name: string;
     email: string;
     role: string;
     password: string;
     otp_configured: boolean;
     created_at: string;
     updated_at: string;
-  }
-  
-export async function getUsers(): Promise<User[]> {
-const response = await fetch(`${API_URL}/users/`);
-if (!response.ok) {
-  throw new Error("Failed to fetch users");
-}
-return response.json();
 }
 
+export async function getUsers(): Promise<User[]> {
+    const response = await fetch(`${API_URL}/users/`, {
+        credentials: "include",
+    });
+    if (!response.ok) {
+        throw new Error("Failed to fetch users");
+    }
+    return response.json();
+}
+
+// Обратите внимание: если эндпоинт для получения текущего пользователя перемещён в auth, обновите URL
 export async function getCurrentUser(): Promise<User> {
-    const response = await fetch(`${API_URL}/users/me/`, {
+    const response = await fetch(`${API_URL}/auth/`, {
         method: "GET",
         credentials: "include",
     });
@@ -32,43 +35,47 @@ export async function getCurrentUser(): Promise<User> {
 }
 
 export async function createUser(newUser: Partial<User>): Promise<User> {
-  const response = await fetch(`${API_URL}/users/`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(newUser),
-  });
-  if (!response.ok) {
-    throw new Error("Failed to create user");
-  }
-  return response.json();
+    const response = await fetch(`${API_URL}/users/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newUser),
+        credentials: "include",
+    });
+    if (!response.ok) {
+        throw new Error("Failed to create user");
+    }
+    return response.json();
 }
 
 export async function updateUser(userId: number, updates: Partial<User>): Promise<User> {
-  const response = await fetch(`${API_URL}/users/${userId}/`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(updates),
-  });
-  if (!response.ok) {
-    throw new Error("Failed to update user");
-  }
-  return response.json();
+    const response = await fetch(`${API_URL}/users/${userId}/`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updates),
+        credentials: "include",
+    });
+    if (!response.ok) {
+        throw new Error("Failed to update user");
+    }
+    return response.json();
 }
 
 export async function deleteUser(userId: number): Promise<void> {
     const response = await fetch(`${API_URL}/users/${userId}/`, {
         method: "DELETE",
+        credentials: "include",
     });
     if (!response.ok) {
         throw new Error("Failed to delete user");
     }
 }
 
-export async function resendOtpEmail(email: string): Promise<{message: string}> {
+export async function resendOtpEmail(email: string): Promise<{ message: string }> {
     const response = await fetch(`${API_URL}/users/resend-otp/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email })
+        body: JSON.stringify({ email }),
+        credentials: "include",
     });
     if (!response.ok) {
         throw new Error("Failed to resend OTP email");
@@ -79,6 +86,7 @@ export async function resendOtpEmail(email: string): Promise<{message: string}> 
 export async function regenerateOtpSecret(userId: number): Promise<void> {
     const response = await fetch(`${API_URL}/users/${userId}/regenerate-otp/`, {
         method: "POST",
+        credentials: "include",
     });
     if (!response.ok) {
         throw new Error("Failed to regenerate OTP secret");

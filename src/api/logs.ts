@@ -3,8 +3,8 @@ const API_URL = "http://127.0.0.1:8000";
 export interface Log {
     id: number;
     user: number | null;
-    user_fname?: string;
-    user_lname?: string;
+    user_first_name?: string;
+    user_last_name?: string;
     user_email?: string;
     action: string;
     timestamp: string;

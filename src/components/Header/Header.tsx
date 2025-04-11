@@ -10,8 +10,8 @@ const { Header } = Layout;
 const { Text } = Typography;
 
 interface User {
-  fname: string;
-  lname: string;
+  first_name: string;
+  last_name: string;
   role: string;
 }
 
@@ -46,7 +46,7 @@ const AppHeader: React.FC = () => {
             <Avatar icon={<UserOutlined />} size={40} />
             {user && (
                 <div className={styles.profileInfo}>
-                  <Text className={styles.profileName}>{user.fname} {user.lname}</Text>
+                  <Text className={styles.profileName}>{user.first_name} {user.last_name}</Text>
                   <Text className={styles.profileRole}>{user.role}</Text>
                 </div>
             )}

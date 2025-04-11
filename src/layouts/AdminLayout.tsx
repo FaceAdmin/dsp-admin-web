@@ -4,6 +4,7 @@ import { Layout } from "antd";
 import AppHeader from "../components/Header/Header";
 import Sidebar from "../components/Sidebar/Sidebar";
 import styles from "./AdminLayout.module.css";
+import { checkAuth } from "../api/auth";
 
 const { Content } = Layout;
 
@@ -11,33 +12,28 @@ const AdminLayout: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkAuth = async () => {
+    const verifyUser = async () => {
       try {
-        const resp = await fetch("http://127.0.0.1:8000/users/me/", {
-          credentials: "include",
-        });
-        if (!resp.ok) {
-          navigate("/login");
-        }
-      } catch (err) {
+        await checkAuth();
+      } catch (error) {
         navigate("/login");
       }
     };
-    checkAuth();
+    verifyUser();
   }, [navigate]);
 
   return (
-    <Layout className={styles.mainLayout}>
-      <AppHeader />
-      <Layout className={styles.bottomLayout}>
-        <Sidebar />
-        <Layout className={styles.contentLayout}>
-          <Content className={styles.content}>
-            <Outlet />
-          </Content>
+      <Layout className={styles.mainLayout}>
+        <AppHeader />
+        <Layout className={styles.bottomLayout}>
+          <Sidebar />
+          <Layout className={styles.contentLayout}>
+            <Content className={styles.content}>
+              <Outlet />
+            </Content>
+          </Layout>
         </Layout>
       </Layout>
-    </Layout>
   );
 };
 

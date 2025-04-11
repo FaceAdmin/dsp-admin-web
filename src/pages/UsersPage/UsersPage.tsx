@@ -29,7 +29,7 @@ const UsersPage: React.FC = () => {
       setFilteredUsers(users);
     } else {
       const filtered = users.filter((u) =>
-          [u.fname, u.lname, u.email].some((field) =>
+          [u.first_name, u.last_name, u.email].some((field) =>
               field.toLowerCase().includes(searchTerm.toLowerCase())
           )
       );
@@ -51,8 +51,8 @@ const UsersPage: React.FC = () => {
   };
 
   const columns: ColumnsType<User> = [
-    { title: "First Name", dataIndex: "fname", key: "fname" },
-    { title: "Last Name", dataIndex: "lname", key: "lname" },
+    { title: "First Name", dataIndex: "first_name", key: "first_name" },
+    { title: "Last Name", dataIndex: "last_name", key: "last_name" },
     { title: "Email", dataIndex: "email", key: "email" },
     { title: "Role", dataIndex: "role", key: "role", width: 100 },
     {

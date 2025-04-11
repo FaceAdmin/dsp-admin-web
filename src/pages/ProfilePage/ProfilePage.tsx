@@ -22,8 +22,8 @@ const ProfilePage: React.FC = () => {
             const currentUser = await getCurrentUser();
             setUser(currentUser);
             form.setFieldsValue({
-                fname: currentUser.fname,
-                lname: currentUser.lname,
+                first_name: currentUser.first_name,
+                last_name: currentUser.last_name,
                 email: currentUser.email,
             });
         } catch (error) {
@@ -37,12 +37,11 @@ const ProfilePage: React.FC = () => {
         if (!user) return;
         try {
             await updateUser(user.user_id, {
-                fname: values.fname,
-                lname: values.lname,
+                first_name: values.first_name,
+                last_name: values.last_name,
                 email: values.email,
             });
             message.success("Profile updated successfully!");
-            // Перезагружаем профиль (может измениться updated_at)
             fetchUserProfile();
         } catch (error) {
             console.error("Error updating user:", error);
@@ -59,14 +58,14 @@ const ProfilePage: React.FC = () => {
                     <Form form={form} layout="vertical" onFinish={handleSaveChanges}>
                         <Form.Item
                             label="First Name"
-                            name="fname"
+                            name="first_name"
                             rules={[{ required: true, message: "Please enter your first name" }]}
                         >
                             <Input />
                         </Form.Item>
                         <Form.Item
                             label="Last Name"
-                            name="lname"
+                            name="last_name"
                             rules={[{ required: true, message: "Please enter your last name" }]}
                         >
                             <Input />
@@ -105,7 +104,7 @@ const ProfilePage: React.FC = () => {
         <div className={styles.profileContainer}>
             <Card className={styles.profileCard}>
                 <Title level={4}>
-                    {user.fname} {user.lname}
+                    {user.first_name} {user.last_name}
                 </Title>
                 <Text>Email: {user.email}</Text>
                 <br />

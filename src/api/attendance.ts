@@ -4,8 +4,8 @@ export interface Attendance {
     attendance_id: number;
     user: {
         user_id: number;
-        fname: string;
-        lname: string;
+        first_name: string;
+        last_name: string;
         email: string;
         role: string;
     };

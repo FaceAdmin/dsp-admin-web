@@ -20,7 +20,7 @@ const routes = createRoutesFromElements(
       <Route path="/attendance" element={<AttendancePage />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/reports" element={<ReportsPage />} />
-    <Route path="/codes" element={<CodesPage />} />
+      <Route path="/codes" element={<CodesPage />} />
       <Route path="/faces" element={<FacesPage />} />
       <Route path="/docs" element={<DocumentationPage />} />
       <Route path="/logs" element={<LogsPage />} />

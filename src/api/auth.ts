@@ -2,16 +2,27 @@ const API_URL = "http://127.0.0.1:8000";
 
 interface LoginResponse {
   user: {
-    fname: string;
-    lname: string;
+    first_name: string;
+    last_name: string;
     role: string;
     email: string;
   };
 }
 
+export const checkAuth = async (): Promise<void> => {
+  const response = await fetch(`${API_URL}/auth/`, {
+    method: "GET",
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("Unauthorized");
+  }
+};
+
 export const loginUser = async (email: string, password: string): Promise<LoginResponse> => {
   try {
-    const response = await fetch(`${API_URL}/users/login/`, {
+    const response = await fetch(`${API_URL}/auth/login/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -34,8 +45,8 @@ export const loginUser = async (email: string, password: string): Promise<LoginR
 
 export const logoutUser = async (): Promise<void> => {
   try {
-    await fetch(`${API_URL}/users/logout/`, {
-      method: "POST",
+    await fetch(`${API_URL}/auth/logout/`, {
+      method: "DELETE",
       credentials: "include",
     });
     window.location.href = "/login";

@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
-import { Modal, Form, Input } from "antd";
+import {Modal, Form, Input, Select} from "antd";
 import { User } from "../../api/users";
+
+const { Option } = Select;
 
 interface AddEditUserModalProps {
   open: boolean;
@@ -22,8 +24,8 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = ({
   useEffect(() => {
     if (isEditMode && user) {
       form.setFieldsValue({
-        fname: user.fname,
-        lname: user.lname,
+        first_name: user.first_name,
+        last_name: user.last_name,
         email: user.email,
         role: user.role,
       });
@@ -46,17 +48,20 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = ({
       onOk={handleOk}
     >
       <Form form={form} layout="vertical">
-        <Form.Item label="First Name" name="fname" rules={[{ required: true }]}>
+        <Form.Item label="First Name" name="first_name" rules={[{ required: true }]}>
           <Input autoComplete="off" />
         </Form.Item>
-        <Form.Item label="Last Name" name="lname" rules={[{ required: true }]}>
+        <Form.Item label="Last Name" name="last_name" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
         <Form.Item label="Email" name="email" rules={[{ required: true, type: "email" }]}>
           <Input autoComplete="off" />
         </Form.Item>
         <Form.Item label="Role" name="role" rules={[{ required: true }]}>
-          <Input autoComplete="off" />
+          <Select placeholder="Select role">
+            <Option value="Admin">Admin</Option>
+            <Option value="User">User</Option>
+          </Select>
         </Form.Item>
 
         {!isEditMode ? (

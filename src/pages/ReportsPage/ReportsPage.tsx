@@ -30,7 +30,7 @@ const ReportsPage: React.FC = () => {
         } else {
             const lowerSearch = searchTerm.toLowerCase();
             const filtered = users.filter((user) =>
-                `${user.fname} ${user.lname} ${user.email}`
+                `${user.first_name} ${user.last_name} ${user.email}`
                     .toLowerCase()
                     .includes(lowerSearch)
             );
@@ -50,7 +50,7 @@ const ReportsPage: React.FC = () => {
 
     const handleSelectUser = (user: User) => {
         setSelectedUser(user);
-        setSearchTerm(`${user.fname} ${user.lname} (${user.email})`);
+        setSearchTerm(`${user.first_name} ${user.last_name} (${user.email})`);
     };
 
     const handleGenerateReport = () => {
@@ -95,7 +95,7 @@ const ReportsPage: React.FC = () => {
                                         className={styles.dropdownItem}
                                         onClick={() => handleSelectUser(user)}
                                     >
-                                        {user.fname} {user.lname} ({user.email})
+                                        {user.first_name} {user.last_name} ({user.email})
                                     </div>
                                 ))
                             ) : (
