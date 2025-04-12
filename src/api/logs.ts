@@ -11,7 +11,9 @@ export interface Log {
 }
 
 export async function getLogs(): Promise<Log[]> {
-    const response = await fetch(`${API_URL}/logs/`);
+    const response = await fetch(`${API_URL}/logs/`, {
+        credentials: "include",
+    });
     if (!response.ok) {
         throw new Error("Failed to fetch logs");
     }

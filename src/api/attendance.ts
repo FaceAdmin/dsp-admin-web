@@ -18,7 +18,9 @@ export async function getAttendanceRecords(date?: string): Promise<Attendance[]>
     const url = date
         ? `${API_URL}/attendance/?date=${date}`
         : `${API_URL}/attendance/`;
-    const response = await fetch(url);
+    const response = await fetch(url, {
+        credentials: "include",
+    });
     if (!response.ok) {
         throw new Error("Failed to fetch attendance records");
     }
@@ -30,6 +32,7 @@ export async function updateAttendance(id: number, updates: Partial<Attendance>)
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updates),
+        credentials: "include",
     });
     if (!response.ok) {
         throw new Error("Failed to update attendance record");
@@ -40,6 +43,7 @@ export async function updateAttendance(id: number, updates: Partial<Attendance>)
 export async function deleteAttendance(id: number): Promise<void> {
     const response = await fetch(`${API_URL}/attendance/${id}/`, {
         method: "DELETE",
+        credentials: "include",
     });
     if (!response.ok) {
         throw new Error("Failed to delete attendance record");
