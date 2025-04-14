@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button, App, Space } from "antd";
-import { ReloadOutlined } from "@ant-design/icons";
+import { MailOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import SearchBar from "../../components/Searchbar/SearchBar";
 import styles from "./CodesPage.module.css";
@@ -86,7 +86,7 @@ const CodesPage: React.FC = () => {
             render: (_, record) => (
                 <Space>
                     <Button
-                        icon={<ReloadOutlined />}
+                        icon={<MailOutlined />}
                         type="primary"
                         onClick={() => handleResendOtp(record)}
                         disabled={record.otp_configured}
