@@ -67,7 +67,7 @@ const FacesPage: React.FC = () => {
         if (searchTerm.trim() !== "") {
             const lowerSearch = searchTerm.toLowerCase();
             temp = temp.filter((user) =>
-                [user.fname, user.lname, user.email, user.role].some((field) =>
+                [user.first_name, user.last_name, user.email, user.role].some((field) =>
                     field.toLowerCase().includes(lowerSearch)
                 )
             );
@@ -145,8 +145,8 @@ const FacesPage: React.FC = () => {
     };
 
     const columns: ColumnsType<UserWithPhoto> = [
-        { title: "First Name", dataIndex: "fname", key: "fname" },
-        { title: "Last Name", dataIndex: "lname", key: "lname" },
+        { title: "First Name", dataIndex: "first_name", key: "first_name" },
+        { title: "Last Name", dataIndex: "last_name", key: "last_name" },
         { title: "Email", dataIndex: "email", key: "email" },
         { title: "Role", dataIndex: "role", key: "role", width: 120 },
         {
@@ -200,7 +200,7 @@ const FacesPage: React.FC = () => {
                 {selectedUser && (
                     <div className={styles.modalContent}>
                         <p>
-                            <b>{selectedUser.fname} {selectedUser.lname}</b>
+                            <b>{selectedUser.first_name} {selectedUser.last_name}</b>
                         </p>
                         <p>
                             Please upload photos if you haven't done it yet. It is recommended to upload around 5-7 photos so that the system can recognise you better. Please make sure your face is clearly visible in your photos, it is not covered and you are looking directly into the camera.

@@ -1,9 +1,9 @@
-const API_URL = "http://127.0.0.1:8000";
+import {API_URL} from "../constants/constants.ts";
 
 export interface Photo {
     photo_id: number;
     photo_path: string;
-    user: number; // или user_id, в зависимости от вашего API
+    user: number;
 }
 
 export async function getPhotos(): Promise<Photo[]> {
