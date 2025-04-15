@@ -107,6 +107,7 @@ const FacesPage: React.FC = () => {
             setSelectedUserPhotos((prev) => prev.filter((p) => p.photo_id !== photoId));
             setAllPhotos((prev) => prev.filter((p) => p.photo_id !== photoId));
             antMessage.success("Photo deleted");
+            await fetchData();
         } catch (error) {
             console.error("Failed to delete photo:", error);
             antMessage.error("Failed to delete photo");
@@ -136,6 +137,7 @@ const FacesPage: React.FC = () => {
                 setAllPhotos((prev) => [...prev, newPhoto]);
             }
             antMessage.success("Photo(s) uploaded successfully");
+            await fetchData();
         } catch (error) {
             console.error("Upload failed:", error);
             antMessage.error("Upload failed");
@@ -220,7 +222,7 @@ const FacesPage: React.FC = () => {
 
                         <div className={styles.photosContainer}>
                             {selectedUserPhotos.map((photo) => {
-                                const fileName = photo.photo_path?.split("/")?.pop() || "";
+                                const fileName = photo.photo;
                                 return (
                                     <div key={photo.photo_id} className={styles.photoBox}>
                                         <span className={styles.photoName}>{fileName}</span>
