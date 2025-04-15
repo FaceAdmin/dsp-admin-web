@@ -1,20 +1,12 @@
-.codesContainer {
-    padding: 24px;
-    background: #fff;
-}
-
-.header {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-    align-items: center;
+.photosContainer {
+    margin-top: 16px;
 }
 
 .uploadButton {
     margin-bottom: 16px;
 }
 
-.photosContainer {
+.photoGrid {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
@@ -32,22 +24,18 @@
 }
 
 .photoName {
-    margin-right: 16px;
+    font-size: 16px;
     max-width: 120px;
+    display: block;
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
-.closeIcon {
+.deleteIcon {
     position: absolute;
     top: -6px;
     right: 2px;
     cursor: pointer;
-    font-weight: bold;
-    color: #888;
-}
-
-.closeIcon:hover {
-    color: red;
+    font-size: 16px;
 }

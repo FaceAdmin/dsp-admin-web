@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button, App, Space } from "antd";
-import { MailOutlined } from "@ant-design/icons";
+import { MailOutlined, UndoOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import SearchBar from "../../components/Searchbar/SearchBar";
 import styles from "./CodesPage.module.css";
@@ -45,7 +45,6 @@ const CodesPage: React.FC = () => {
         setLoading(false);
     };
 
-    // Старая логика "Resend Email"
     const handleResendOtp = async (record: User) => {
         try {
             await resendOtpEmail(record.email);
@@ -57,7 +56,6 @@ const CodesPage: React.FC = () => {
         }
     };
 
-    // Новая логика "Regenerate Secret"
     const handleRegenerateSecret = async (record: User) => {
         try {
             await regenerateOtpSecret(record.user_id);
@@ -94,6 +92,7 @@ const CodesPage: React.FC = () => {
                         Resend Email
                     </Button>
                     <Button
+                        icon={<UndoOutlined />}
                         type="primary"
                         onClick={() => handleRegenerateSecret(record)}
                     >

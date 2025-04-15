@@ -4,6 +4,7 @@ import type { TabsProps } from "antd";
 import dayjs from "dayjs";
 import { getCurrentUser, updateUser, User } from "../../api/users";
 import styles from "./ProfilePage.module.css";
+import ProfilePhotosTab from "./ProfilePhotosTab.tsx";
 
 const { Title, Text } = Typography;
 
@@ -87,12 +88,52 @@ const ProfilePage: React.FC = () => {
         {
             key: "photos",
             label: "Photos",
-            children: <div className={styles.tabContent}>Photos content (coming soon)...</div>,
+            children: (
+                <div className={styles.tabContent}>
+                    {user && <ProfilePhotosTab user={user} />}
+                </div>
+            ),
         },
         {
             key: "help",
             label: "Help",
-            children: <div className={styles.tabContent}>Help content (coming soon)...</div>,
+            children: (
+                <div className={styles.tabContent}>
+                    <h2>Photo Guidelines for Face Recognition</h2>
+                    <p>
+                        To ensure accurate and reliable face recognition, please upload clear, high-quality
+                        photos of yourself where your face is fully visible. We recommend uploading a set of
+                        5-7 photos taken from various angles, including a straight-on view as well as profile
+                        (side) views. These photos help the system to build a comprehensive facial encoding.
+                    </p>
+                    <p>
+                        For best results, please consider the following guidelines:
+                    </p>
+                    <ul>
+                        <li>
+                            <strong>Good lighting:</strong> Make sure your face is well illuminated with minimal shadows.
+                        </li>
+                        <li>
+                            <strong>Visibility:</strong> Avoid using accessories like hats, sunglasses, or masks that
+                            might obscure your facial features.
+                        </li>
+                        <li>
+                            <strong>Variety:</strong> Capture your face from multiple angles (front, left, right, and
+                            additional angles) to allow the system to learn your unique features effectively.
+                        </li>
+                        <li>
+                            <strong>Focus:</strong> Ensure that your face is in sharp focus and not blurry.
+                        </li>
+                    </ul>
+                    <p>
+                        Once your photos are uploaded in the Photos tab, our system will compute your facial
+                        encodings. From that moment, you can simply present your face to gain access.
+                    </p>
+                    <p>
+                        Thank you for helping us build a secure and user-friendly system!
+                    </p>
+                </div>
+            ),
         },
     ];
 
