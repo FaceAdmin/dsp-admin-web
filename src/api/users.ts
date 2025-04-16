@@ -22,7 +22,6 @@ export async function getUsers(): Promise<User[]> {
     return response.json();
 }
 
-// Обратите внимание: если эндпоинт для получения текущего пользователя перемещён в auth, обновите URL
 export async function getCurrentUser(): Promise<User> {
     const response = await fetch(`${API_URL}/auth/`, {
         method: "GET",
