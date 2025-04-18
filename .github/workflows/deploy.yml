@@ -1,0 +1,24 @@
+name: Deploy Frontend
+
+on:
+  workflow_dispatch:
+    inputs:
+      artifact_id:
+        description: "ID of the artifact to deploy"
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy
+        uses: joelwmale/webhook-action@master
+        with:
+          url: ${{ secrets.DEPLOY_WEBHOOK_URL }}
+          body: |
+            {
+              "artifact_id": ${{ inputs.artifact_id }},
+              "github_token": "${{ secrets.GITHUB_TOKEN }}"
+            }
