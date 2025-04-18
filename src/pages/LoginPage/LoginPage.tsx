@@ -19,16 +19,13 @@ const LoginPage: React.FC = () => {
     setErrorMessage(null);
 
     try {
-      // 1) отправляем логин
       await loginUser(values.email, values.password);
 
-      // 2) подтягиваем полную инфу о current user
       const current: User = await getCurrentUser();
       setUser(current);
 
       message.success("Login successful!");
 
-      // 3) направляем по роли
       if (current.role === "Admin") {
         navigate("/dashboard", { replace: true });
       } else {
