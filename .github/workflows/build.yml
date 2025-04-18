@@ -1,0 +1,66 @@
+name: Build Frontend
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      artifact-id: ${{ steps.upload_artifact.outputs.artifact-id }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Build project
+        run: npm run build
+      - name: Package build artifact
+        run: |
+          mkdir artifact
+          cp -r dist/* artifact/
+      - name: Upload artifact
+        id: upload_artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build
+          path: artifact/
+      - name: Set artifact number in run description
+        run: |
+          ARTIFACT_ID="${{ steps.upload_artifact.outputs.artifact-id }}"
+          echo "Artifact ID: $ARTIFACT_ID" >> $GITHUB_STEP_SUMMARY
+      - name: Add comment to PR
+        if: github.event_name == 'pull_request'
+        run: |
+          ARTIFACT_ID="${{ steps.upload_artifact.outputs.artifact-id }}"
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          COMMENT="✅ Frontend build completed! 🎉  
+          - **Artifact ID:** $ARTIFACT_ID  
+          - [Download it here](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+          
+          gh pr comment $PR_NUMBER --body "$COMMENT"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        uses: joelwmale/webhook-action@master
+        with:
+          url: ${{ secrets.DEPLOY_WEBHOOK_URL }}
+          body: |
+            {
+              "artifact_id": ${{ needs.build.outputs.artifact-id }},
+              "github_token": "${{ secrets.GITHUB_TOKEN }}"
+            }
