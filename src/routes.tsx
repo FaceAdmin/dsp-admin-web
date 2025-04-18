@@ -3,7 +3,6 @@ import {
     createBrowserRouter,
     RouterProvider,
     Navigate,
-    Outlet,
 } from "react-router-dom";
 
 import { AuthContext } from "./context/AuthContext";
@@ -47,13 +46,9 @@ const RequireAdmin: React.FC<GuardProps> = ({ children }) => {
 const MainLayout: React.FC = () => {
     const { user } = useContext(AuthContext);
     return user?.role === "Admin" ? (
-        <AdminLayout>
-            <Outlet />
-        </AdminLayout>
+        <AdminLayout />
     ) : (
-        <UserLayout>
-            <Outlet />
-        </UserLayout>
+        <UserLayout />
     );
 };
 

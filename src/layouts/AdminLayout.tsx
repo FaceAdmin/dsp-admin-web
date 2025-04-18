@@ -15,7 +15,7 @@ const AdminLayout: React.FC = () => {
     const verifyUser = async () => {
       try {
         await checkAuth();
-      } catch (error) {
+      } catch {
         navigate("/login");
       }
     };
