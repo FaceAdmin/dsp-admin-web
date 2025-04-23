@@ -3,6 +3,7 @@ import { Table, Button, DatePicker, App, Tag, Space, Modal, TimePicker, Form } f
 import { EditOutlined, DeleteOutlined, RedoOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
+import type { Dayjs } from "dayjs";
 import durationPlugin from "dayjs/plugin/duration";
 import { getAttendanceRecords, updateAttendance, deleteAttendance, Attendance } from "../../api/attendance";
 import SearchBar from "../../components/Searchbar/SearchBar";
@@ -15,8 +16,7 @@ const AttendancePage: React.FC = () => {
     const [records, setRecords] = useState<Attendance[]>([]);
     const [filteredRecords, setFilteredRecords] = useState<Attendance[]>([]);
     const [loading, setLoading] = useState(false);
-    const today = dayjs().format("YYYY-MM-DD");
-    const [selectedDate, setSelectedDate] = useState<string>(today);
+    const [selectedDate, setSelectedDate] = useState<string>(dayjs().format("YYYY-MM-DD"));
     const [searchTerm, setSearchTerm] = useState("");
 
     const { message, modal } = App.useApp();
@@ -155,7 +155,13 @@ const AttendancePage: React.FC = () => {
                 <SearchBar value={searchTerm} onChange={(val) => setSearchTerm(val)} />
                 <Space>
                     <DatePicker
-                        onChange={(_, dateString) => setSelectedDate(dateString || today)}
+                        onChange={(date) => {
+                            setSelectedDate(
+                                date
+                                    ? (date as Dayjs).format("YYYY-MM-DD")
+                                    : dayjs().format("YYYY-MM-DD")
+                            );
+                        }}
                         format="YYYY-MM-DD"
                         placeholder="Select Date"
                         inputReadOnly={true}
