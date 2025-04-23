@@ -16,7 +16,8 @@ const AttendancePage: React.FC = () => {
     const [records, setRecords] = useState<Attendance[]>([]);
     const [filteredRecords, setFilteredRecords] = useState<Attendance[]>([]);
     const [loading, setLoading] = useState(false);
-    const [selectedDate, setSelectedDate] = useState<string>(dayjs().format("YYYY-MM-DD"));
+    const today = dayjs().format("YYYY-MM-DD");
+    const [selectedDate, setSelectedDate] = useState<string | null>(today);
     const [searchTerm, setSearchTerm] = useState("");
 
     const { message, modal } = App.useApp();
@@ -155,16 +156,14 @@ const AttendancePage: React.FC = () => {
                 <SearchBar value={searchTerm} onChange={(val) => setSearchTerm(val)} />
                 <Space>
                     <DatePicker
-                        onChange={(date) => {
-                            setSelectedDate(
-                                date
-                                    ? (date as Dayjs).format("YYYY-MM-DD")
-                                    : dayjs().format("YYYY-MM-DD")
-                            );
-                        }}
+                        value={ selectedDate ? dayjs(selectedDate) : undefined }
+                        onChange={(date: Dayjs | null) =>
+                            setSelectedDate(date ? date.format("YYYY-MM-DD") : null)
+                        }
+                        allowClear
                         format="YYYY-MM-DD"
                         placeholder="Select Date"
-                        inputReadOnly={true}
+                        inputReadOnly
                     />
                     <Button
                         icon={<RedoOutlined />}
