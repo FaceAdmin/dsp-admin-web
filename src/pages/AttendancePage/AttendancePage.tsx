@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { Table, Button, DatePicker, App, Tag, Space, Modal, TimePicker, Form } from "antd";
 import { EditOutlined, DeleteOutlined, RedoOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
@@ -9,11 +9,13 @@ import { getAttendanceRecords, updateAttendance, deleteAttendance, Attendance } 
 import SearchBar from "../../components/Searchbar/SearchBar";
 import styles from "./AttendancePage.module.css";
 import { parseDuration } from "../../utils/parseDuration.ts";
+import {AuthContext} from "../../context/AuthContext.tsx";
 
 dayjs.extend(durationPlugin);
 
 const AttendancePage: React.FC = () => {
     const [records, setRecords] = useState<Attendance[]>([]);
+    const { user } = useContext(AuthContext);
     const [filteredRecords, setFilteredRecords] = useState<Attendance[]>([]);
     const [loading, setLoading] = useState(false);
     const today = dayjs().format("YYYY-MM-DD");
@@ -104,7 +106,7 @@ const AttendancePage: React.FC = () => {
         }
     };
 
-    const columns: ColumnsType<Attendance> = [
+    const baseColumns: ColumnsType<Attendance> = [
         { title: "First Name", dataIndex: ["user", "first_name"], key: "first_name" },
         { title: "Last Name", dataIndex: ["user", "last_name"], key: "last_name" },
         { title: "Email", dataIndex: ["user", "email"], key: "email" },
@@ -137,18 +139,32 @@ const AttendancePage: React.FC = () => {
                 return parseDuration(value);
             },
         },
-        {
-            title: "Actions",
-            key: "actions",
-            width: 100,
-            render: (_, record) => (
-                <Space>
-                    <Button icon={<EditOutlined />} type="text" onClick={() => handleEdit(record)} />
-                    <Button icon={<DeleteOutlined />} danger type="text" onClick={() => handleDelete(record)} />
-                </Space>
-            ),
-        },
     ];
+    const columns: ColumnsType<Attendance> = user?.role === "Admin"
+        ? [
+            ...baseColumns,
+            {
+                title: "Actions",
+                key: "actions",
+                width: 100,
+                render: (_: any, record: Attendance) => (
+                    <Space>
+                        <Button
+                            icon={<EditOutlined />}
+                            type="text"
+                            onClick={() => handleEdit(record)}
+                        />
+                        <Button
+                            icon={<DeleteOutlined />}
+                            danger
+                            type="text"
+                            onClick={() => handleDelete(record)}
+                        />
+                    </Space>
+                ),
+            },
+        ]
+        : baseColumns;
 
     return (
         <div className={styles.attendanceContainer}>
