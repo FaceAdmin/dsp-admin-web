@@ -70,11 +70,6 @@ const LoginPage: React.FC = () => {
               >
                 <Input.Password placeholder="Enter your password" />
               </Form.Item>
-
-              <div className={styles.forgotPassword}>
-                <a href="#">Forgot Password?</a>
-              </div>
-
               <Form.Item>
                 <Button
                     type="primary"
