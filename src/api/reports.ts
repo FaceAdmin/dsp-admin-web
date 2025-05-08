@@ -7,11 +7,9 @@ export interface ReportParams {
 }
 
 export function getReportUrl(params: ReportParams): string {
-    const url = new URL(`${API_URL}/reports/csv/`);
-    url.searchParams.append("start_date", params.start_date);
-    url.searchParams.append("end_date", params.end_date);
+    let url = `${API_URL}/reports/csv/?start_date=${params.start_date}&end_date=${params.end_date}`;
     if (params.user_id) {
-        url.searchParams.append("user_id", params.user_id.toString());
+        url += `&user_id=${params.user_id.toString()}`
     }
-    return url.toString();
+    return url;
 }
